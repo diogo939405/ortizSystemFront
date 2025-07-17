@@ -12,7 +12,7 @@ export default function EditRow() {
     return (
         <div className='EditRow-container'>
             <div className='EditRow-container-card'>
-                <h2>Editar Boleto</h2>
+                <h2>Editar Boledto</h2>
 
                 <p><strong>ID:</strong> {boletoDataId?.idBoleto}</p>
                 <p><strong>Código:</strong> {boletoDataId?.codigo}</p>
