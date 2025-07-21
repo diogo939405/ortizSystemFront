@@ -7,6 +7,8 @@ import 'primeicons/primeicons.css';                                // ✅ Ícone
 import 'primeflex/primeflex.css';
 import './App.css'
 import GetBoletos from './req/GetBoletos';
+import AddBoleto from './Page/AddBoleto/AddBoleto';
+
 
 
 function App() {
@@ -14,11 +16,12 @@ function App() {
     <>
       <GetBoletos />
       <BrowserRouter>
-
+        <Sidebar />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/addBoleto' element={<AddBoleto />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter >
     </>
   )
 }

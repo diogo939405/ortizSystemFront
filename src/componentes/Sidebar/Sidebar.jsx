@@ -11,9 +11,9 @@ export default function Sidebar() {
 
     const { sidebarOpen, setSidebarOpen } = useSidebarContext();
     return (
-        <div className='sidebar' style={sidebarOpen ? { width: "250px" } : { width: "90px" }}>
+        <div className='sidebar' style={sidebarOpen ? { width: "200px" } : { width: "90px" }}>
             <div className='sidebarLogo'>
-                <img src={logo} width='120px' height='100px'></img>
+                <img src={logo} width={sidebarOpen ? '160px' : '100px'} height={sidebarOpen ? '170px' : '120px'}></img>
             </div>
             <ul className='sidebarList'>
                 {SidebarData.map((val, key) => {
@@ -22,6 +22,9 @@ export default function Sidebar() {
                             className='row'
                             style={{ alignItems: sidebarOpen ? 'center' : 'none' }}
                             id={window.location.pathname === val.path ? 'active' : ''}
+                            onClick={() => {
+                                window.location.pathname = val.path
+                            }}
                         >
                             <div id='icon' style={{ marginLeft: !sidebarOpen ? '30px' : '0px' }}> {val.icon}</div>{''}
                             <div id='title'>{sidebarOpen ? val.title : ''}</div>

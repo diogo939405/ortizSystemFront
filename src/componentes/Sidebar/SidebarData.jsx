@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaHome } from "react-icons/fa";
+import { FaHome, FaPlus } from "react-icons/fa";
 
 
 export const SidebarData = [
@@ -10,9 +10,9 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title: 'About',
-        path: '/about',
-        icon: <FaHome />,
+        title: 'Adiciona boleto',
+        path: '/addBoleto',
+        icon: <FaPlus />,
         cName: 'nav-text'
     },
     {

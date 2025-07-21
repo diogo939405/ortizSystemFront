@@ -8,7 +8,6 @@ import './Tabela.css'; // Importe o arquivo CSS
 import { Tag } from 'primereact/tag'; // Mantenha o Tag do PrimeReact se você quiser usá-lo
 
 export default function TabelaTeste() {
-    const { sidebarOpen } = useSidebarContext();
     const {
         boletosData,
         loading,
@@ -99,15 +98,13 @@ export default function TabelaTeste() {
 
     return (
         <>
-            {edit ? <EditRow /> : null} {/* Mantém seu modal de edição */}
+            {edit ? <EditRow /> : null}
             <div className='bodyTable'>
                 <div
                     className="table-container" // Aplica a classe do CSS
                     style={{
-                        marginLeft: sidebarOpen ? '0px' : '-80px',
                         marginRight: '30px',
                         transition: 'margin-left 0.3s ease',
-                        // Remover as propriedades de height/width aqui, pois já estão no CSS da classe 'table-container'
                     }}
                 >
                     {/* Cabeçalho de Pesquisa/Filtro */}

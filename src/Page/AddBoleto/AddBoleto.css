@@ -1,0 +1,245 @@
+/* Reset e base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f8fa;
+    color: #333;
+    overflow-x: hidden;
+
+  }
+  
+  .addBoleto-Body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    padding: 40px 20px;
+    
+  }
+  
+  /* Título */
+  .addBoleto-Body-title {
+    margin-bottom: 30px;
+  }
+  
+  .addBoleto-Body-title h3 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  
+  /* Formulário */
+  .addBoleto-Body-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .addBoleto-Body-content-form {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 700px;
+    border-radius: 12px;
+    padding: 40px 30px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    transition: 0.3s ease-in-out;
+  }
+  
+  /* Grupos de inputs */
+  .addBoleto-form-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  /* Input padrão */
+  .addBoleto-form-inputs-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1 1 250px;
+  }
+  
+  .addBoleto-form-inputs-input label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaço entre texto e ícone */
+  }
+  
+  /* Ícones nos labels */
+  .icon-input {
+    font-size: 20px;
+    color: #2c3e50;
+    transition: color 0.3s ease;
+  }
+  
+  .icon-input:hover {
+    color: #0056b3;
+  }
+  
+  .addBoleto-form-inputs-input input {
+    height: 45px;
+    padding: 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  
+  .addBoleto-form-inputs-input input:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    outline: none;
+  }
+  
+  /* Checkbox */
+  .addBoleto-form-inputs-bookmarks {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .react-datepicker-popper{
+    right: 1000px !important;
+    top: -10px !important;
+    z-index: 1000;
+    
+  }
+  
+  .addBoleto-form-inputs-bookmarks label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #333;
+    gap: 10px;
+  }
+  
+  .addBoleto-form-inputs-bookmarks input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    accent-color: #007bff;
+  }
+  
+  /* Parcelas personalizadas */
+  .addBoleto-form-inputs-input-parcelaEdit {
+    background-color: #f0f4f8;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid #2c3e50;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    transition: all 0.3s ease-in-out;
+
+  }
+ 
+  .addBoleto-form-inputs-input-parcelaEdit:hover {
+    transform: translateY(-5%);
+  }
+  
+  
+  .addBoleto-form-inputs-input-parcelaEdit label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .addBoleto-form-inputs-input-parcelaEdit div {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .addBoleto-form-inputs-input-parcelaEdit input {
+    flex: 1 1 200px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 14px;
+  }
+  
+  .addBoleto-form-inputs-input-parcelaEdit input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    outline: none;
+  }
+  
+  .addBoleto-form-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  
+  }
+
+  .addBoleto-form-buttons button{
+    font-family: 'Poppins', sans-serif;
+    width: 180px;
+    align-items: center;
+    height: 40px;
+    border: unset;
+    border-radius: 15px;
+    color: #333;
+    z-index: 1;
+    background: #e8e8e8;
+    position: relative;
+    font-weight: 700;
+    font-size: 17px;
+    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    transition: all 250ms;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .addBoleto-form-buttons button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    border-radius: 15px;
+    background-color: #2c3e50;
+    z-index: -1;
+    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+    transition: all 250ms
+  }
+  .addBoleto-form-buttons button:hover {
+    color: #e8e8e8;
+  }
+
+  .addBoleto-form-buttons button:hover::before {
+    width: 100%;
+  }
+  
+  /* Responsivo */
+  @media (max-width: 768px) {
+    .addBoleto-Body-content-form {
+      padding: 30px 20px;
+    }
+  
+    .addBoleto-form-inputs {
+      flex-direction: column;
+    }
+  
+    .addBoleto-form-inputs-input-parcelaEdit div {
+      flex-direction: column;
+    }
+  }
+  
