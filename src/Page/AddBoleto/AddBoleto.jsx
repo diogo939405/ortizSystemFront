@@ -14,9 +14,9 @@ import useAddBoletoContext from './../../contexts/UseAddBoletoContext';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ptBR from 'date-fns/locale/pt-BR';
-import { GerarParcelas } from './Utils/GerarParcelas'
 import PostBoletos from '../../req/PostBoletos'
-
+import VerifyCamps from './Utils/VerifyCamps'
+import { toast } from 'react-toastify'
 
 export default function AddBoleto() {
     const {
@@ -64,7 +64,7 @@ export default function AddBoleto() {
             setNewBoletoInfo((prev) => ({
                 ...prev,
                 qParcelas: input,
-                parcelas: CalcularParcelas(prev.valor, input)
+                parcelas: CalcularParcelas(prev.valor, input, prev.parcelas?.dataVencimento)
             }));
             return;
         }
@@ -110,13 +110,27 @@ export default function AddBoleto() {
     };
 
     const handlePost = async () => {
-        PostBoletos({ newBoletoInfo })
-            .then(() => {
-                alert('Boleto adicionado com sucesso!')
-            })
-            .catch((error) => {
-                console.error('Erro ao enviar boleto:', error);
-            })
+        const camposValidos = VerifyCamps(newBoletoInfo);
+
+        if (!camposValidos) {
+            toast.error('Verifique os campos obrigatórios e as parcelas!');
+            return;
+        }
+
+        try {
+            const resultado = await PostBoletos(newBoletoInfo);
+            if (resultado) {
+                toast.success('Boleto adicionado com sucesso!');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                toast.error('Erro ao adicionar boleto!');
+            }
+        } catch (error) {
+            console.error('Erro ao enviar boleto:', error);
+            toast.error('Erro ao enviar boleto!');
+        }
     };
 
     return (
@@ -183,7 +197,7 @@ export default function AddBoleto() {
                                             showYearDropdown
                                             dropdownMode="select"
                                             required
-                                            showIcon
+
                                         />
                                     </div>
                                 </div>
@@ -215,7 +229,7 @@ export default function AddBoleto() {
                                                 />
                                                 <input
                                                     type="date"
-                                                    value={parcela.vencimento}
+                                                    value={parcela.dataVencimento}
                                                     onChange={(e) => {
                                                         const data = e.target.value;
                                                         const novasParcelas = [...newBoletoInfo.parcelas];
@@ -225,7 +239,6 @@ export default function AddBoleto() {
                                                             parcelas: novasParcelas
                                                         }));
                                                     }}
-                                                    placeholder='Digite o vencimento da parcela'
                                                 />
                                             </div>
                                         </div>

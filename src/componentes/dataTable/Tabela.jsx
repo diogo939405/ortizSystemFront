@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Importe os ícones do react-icons
+import { FaEdit, FaTrashAlt, FaEye } from 'react-icons/fa'; // Importe os ícones do react-icons
 import GetBoletosById from '../../req/GetBoletosById';
 import useTableContext from '../../contexts/UseTableContext';
 import EditRow from './editRow/EditRow';
@@ -8,6 +8,7 @@ import './Tabela.css'; // Importe o arquivo CSS
 import { Tag } from 'primereact/tag'; // Mantenha o Tag do PrimeReact se você quiser usá-lo
 
 export default function TabelaTeste() {
+
     const {
         boletosData,
         loading,
@@ -23,7 +24,7 @@ export default function TabelaTeste() {
 
     // Estado local para paginação
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Limite de 10 linhas por página
+    const itemsPerPage = 7;
 
     // Inicializa filtros uma vez
     useEffect(() => {
@@ -64,38 +65,64 @@ export default function TabelaTeste() {
         setLoading(false);
     };
 
+    // faz a conversão dos dados para o formato de tabela
+    const parcelasFlatten = useMemo(() => {
+        return boletosData.flatMap(boleto => {
+            console.log('Boleto:', boleto);
+            if (!boleto.parcelas || !Array.isArray(boleto.parcelas)) return [];
+            const totalParcelas = boleto.parcelas.length;
+            return boleto?.parcelas.map(parcela => ({
+                id: boleto.id,
+                idBoleto: boleto.idBoleto,
+                tipoGasto: boleto.tipoGasto,
+                valorTotal: boleto.valor,
+                numeroParcela: parcela.numeroParcela,
+                totalParcelas: totalParcelas,
+                valorParcela: parseFloat(
+                    parcela.valor.replace('R$', '').replace('.', '').replace(',', '.')
+                ),
+                vencimento: parcela.vencimento,
+                status: parcela.status
+            }));
+        });
+    }, [boletosData]);
+
     const handleDelete = (rowData) => {
         if (window.confirm(`Tem certeza que deseja excluir o boleto: ${rowData.codigo}?`)) {
             alert(`Excluir boleto: ${rowData.codigo} (ID: ${rowData.idBoleto})`);
             // Implemente a lógica de exclusão aqui (chamar API, remover do estado, etc.)
         }
     };
-    const filteredData = useMemo(() => {
-        if (!globalFilterValue) {
-            return boletosData;
-        }
-        const lowerCaseFilter = globalFilterValue.toLowerCase();
-        return boletosData.filter(item =>
-            (item.idBoleto?.toString().toLowerCase().includes(lowerCaseFilter)) ||
-            (item.codigo?.toLowerCase().includes(lowerCaseFilter)) ||
-            (item.valor?.toString().toLowerCase().includes(lowerCaseFilter)) ||
-            (item.tipoGasto?.toLowerCase().includes(lowerCaseFilter)) ||
-            (item.status ? 'ativo' : 'inativo').includes(lowerCaseFilter)
-        );
-    }, [boletosData, globalFilterValue]);
 
+    // recebe os dados filtrados
+    const filteredData = useMemo(() => {
+        if (!globalFilterValue) return parcelasFlatten;
+        const lowerCaseFilter = globalFilterValue.toLowerCase();
+        return parcelasFlatten.filter(item =>
+            item.tipoGasto?.toLowerCase().includes(lowerCaseFilter) ||
+            item.valorTotal?.toString().includes(lowerCaseFilter) ||
+            item.valorParcela?.toString().includes(lowerCaseFilter)
+        );
+    }, [parcelasFlatten, globalFilterValue]);
     // Calcula o número total de páginas dos dados filtrados
     const totalPages = useMemo(() => {
         return Math.ceil(filteredData.length / itemsPerPage);
     }, [filteredData.length, itemsPerPage]);
 
-    // Obtém os itens da página atual dos dados filtrados
+    // Obtém os itens da página atual dos dados filtrados e ordena em data de vencimento
     const currentTableData = useMemo(() => {
+        // Ordenar os dados pelo vencimento mais próximo
+        const sortedData = [...filteredData].sort((a, b) => {
+            const dateA = new Date(a.dataVencimento);
+            const dateB = new Date(b.dataVencimento);
+            return dateA - dateB; // menor para maior
+        });
+
+        // Paginação
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
-        return filteredData.slice(startIndex, endIndex);
+        return sortedData.slice(startIndex, endIndex);
     }, [filteredData, currentPage, itemsPerPage]);
-
     return (
         <>
             {edit ? <EditRow /> : null}
@@ -125,29 +152,28 @@ export default function TabelaTeste() {
 
                         <table className="styled-table">
                             <thead>
-                                {/* REMOVA QUALQUER ESPAÇO/QUEBRA DE LINHA AQUI */}
                                 <tr>
-                                    <th className="always-visible">ID Boleto</th>
-                                    <th>Código Boleto</th>
-                                    <th>Valor</th>
                                     <th>Tipo de Gasto</th>
-                                    <th>Status</th>
-                                    <th className="always-visible">Ações</th>
+                                    <th>Valor Total</th>
+                                    <th>Parcela</th>
+                                    <th>Valor da Parcela</th>
+                                    <th>Vencimento</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* CERTIFIQUE-SE DE QUE NÃO HÁ ESPAÇOS/QUEBRAS DE LINHA AQUI TAMBÉM */}
                                 {currentTableData.length > 0 ? (
-                                    currentTableData.map((item) => (
-                                        <tr key={item.idBoleto}>
-                                            <td className="always-visible">{item.idBoleto}</td>
-                                            <td>{item.codigo}</td>
-                                            <td>{item.valor}</td>
+                                    currentTableData.map((item, index) => (
+                                        <tr key={`${item.id}-${index}`}>
                                             <td>{item.tipoGasto}</td>
-                                            <td>
-                                                <Tag value={item.status ? 'Ativo' : 'Inativo'} severity={getStatusClass(item.status)} />
-                                            </td>
+                                            <td>R$ {parseFloat(item.valorTotal).toFixed(2)}</td>
+                                            <td>{item.numeroParcela}/{item.totalParcelas}</td>
+                                            <td style={{ color: '#9C703BFF' }}>R$ {parseFloat(item.valorParcela).toFixed(2)}</td>
+                                            <td>{new Date(item.vencimento).toLocaleDateString('pt-BR')}</td>
                                             <td className="always-visible">
+                                                <button className="action-button">
+                                                    <FaEye />
+                                                </button>
                                                 <button className="action-button" onClick={() => openEditModal(item)}>
                                                     <FaEdit />
                                                 </button>
@@ -159,8 +185,8 @@ export default function TabelaTeste() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>
-                                            Nenhum registro encontrado.
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>
+                                            Nenhuma parcela encontrada.
                                         </td>
                                     </tr>
                                 )}

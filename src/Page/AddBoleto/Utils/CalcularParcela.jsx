@@ -1,5 +1,4 @@
 export function CalcularParcelas(valorString, quantidadeString) {
-    // Extrai valor numérico da string "R$ 1.234,56"
     const rawValor = parseFloat(valorString?.replace(/\D/g, '')) / 100;
     const quantidade = parseInt(quantidadeString);
 
@@ -7,10 +6,14 @@ export function CalcularParcelas(valorString, quantidadeString) {
         return [];
     }
 
+
+
     const valorParcela = (rawValor / quantidade).toFixed(2);
 
-    return Array.from({ length: quantidade }, () => ({
+    return Array.from({ length: quantidade }, (_, i) => ({
+        numeroParcela: i + 1,
         valor: 'R$ ' + valorParcela.replace('.', ','),
-        vencimentoInicial: ''
+        // vencimento: '',
+        status: true
     }));
 }

@@ -11,7 +11,5 @@
     justify-content: center; /* Você pode mudar isso para flex-start se quiser que comecem do topo */
     align-items: center;
     width: 100%;
-    min-height: 100vh; /* Use min-height para permitir que o conteúdo expanda a altura */
     background-color:#f5f5f5 ;
-    padding: 20px; /* Adicione um padding para melhor visualização */
 }

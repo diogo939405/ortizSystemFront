@@ -9,9 +9,10 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 2rem 1rem;
-    margin-top: -5rem;
-    margin-bottom: 2rem;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    /* padding: 2rem 1rem; */
+  
 }
 
 /* Container de todos os cards */
@@ -32,7 +33,7 @@
     border-radius: 1rem;
     width: 280px;
     height: 160px;
-    padding: 1.5rem;
+    padding: 1rem;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
