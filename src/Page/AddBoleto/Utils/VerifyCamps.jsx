@@ -22,7 +22,6 @@ export default function VerifyCamps(newBoletoInfo) {
     if (algumaParcelaInvalida) {
         return false;
     }
-
     const valorTotal = parseFloat(newBoletoInfo.valor.replace('R$ ', '').replace(',', '.'));
     const valorTotalParcelas = parcelas.reduce((total, parcela) => {
         return total + parseFloat(parcela.valor.replace('R$ ', '').replace(',', '.'));
@@ -35,6 +34,7 @@ export default function VerifyCamps(newBoletoInfo) {
     if (Math.abs(valorTotalParcelas - valorTotal) > 0.01) { // tolerância
         return false;
     }
+
 
     return true;
 }

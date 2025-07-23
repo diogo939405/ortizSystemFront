@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FaEdit, FaTrashAlt, FaEye } from 'react-icons/fa'; // Importe os ícones do react-icons
+import { MdOutlineDoneOutline } from "react-icons/md";
+
 import GetBoletosById from '../../req/GetBoletosById';
 import useTableContext from '../../contexts/UseTableContext';
 import EditRow from './editRow/EditRow';
-import useSidebarContext from '../../contexts/UseSidebarContext';
 import './Tabela.css'; // Importe o arquivo CSS
 import { Tag } from 'primereact/tag'; // Mantenha o Tag do PrimeReact se você quiser usá-lo
 
@@ -25,7 +26,6 @@ export default function TabelaTeste() {
     // Estado local para paginação
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 7;
-
     // Inicializa filtros uma vez
     useEffect(() => {
         setFilters({
@@ -58,7 +58,7 @@ export default function TabelaTeste() {
         setEdit(true);
         setLoading(true);
         const data = await GetBoletosById(rowData.id); // Use idBoleto conforme seus dados
-
+        localStorage.setItem('idBoleto', rowData.id)
         if (data) {
             setBoletoDataId(data);
         }
@@ -171,8 +171,8 @@ export default function TabelaTeste() {
                                             <td style={{ color: '#9C703BFF' }}>R$ {parseFloat(item.valorParcela).toFixed(2)}</td>
                                             <td>{new Date(item.vencimento).toLocaleDateString('pt-BR')}</td>
                                             <td className="always-visible">
-                                                <button className="action-button">
-                                                    <FaEye />
+                                                <button className="action-button complete">
+                                                    <MdOutlineDoneOutline />
                                                 </button>
                                                 <button className="action-button" onClick={() => openEditModal(item)}>
                                                     <FaEdit />

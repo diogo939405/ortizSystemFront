@@ -101,11 +101,20 @@
     border: none;
     cursor: pointer;
     margin: 0 6px;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: #007bff;
     transition: transform 0.2s, color 0.2s;
+
+}
+.action-button.complete{
+    color: #28a745;
+    
 }
 
+.action-button.complete:hover{
+    color: #125822;
+    
+}
 .action-button:hover {
     color: #0056b3;
     transform: scale(1.1);
@@ -114,6 +123,8 @@
 .action-button.delete {
     color: #dc3545;
 }
+
+
 
 .action-button.delete:hover {
     color: #b02a37;

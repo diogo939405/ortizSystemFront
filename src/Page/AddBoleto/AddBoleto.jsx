@@ -17,7 +17,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import PostBoletos from '../../req/PostBoletos'
 import VerifyCamps from './Utils/VerifyCamps'
 import { toast } from 'react-toastify'
-
+import Loading from '../../componentes/Loading/Loading';
 export default function AddBoleto() {
     const {
         editParcelas,
@@ -25,6 +25,8 @@ export default function AddBoleto() {
         newBoletoInfo,
         setNewBoletoInfo
     } = useAddBoletoContext();
+    const [loading, setLoading] = useState(false);
+
     const handleData = (e) => {
         const { name, value } = e.target;
 
@@ -110,24 +112,29 @@ export default function AddBoleto() {
     };
 
     const handlePost = async () => {
+        setLoading(true);
         const camposValidos = VerifyCamps(newBoletoInfo);
 
         if (!camposValidos) {
             toast.error('Verifique os campos obrigatórios e as parcelas!');
+            setLoading(false);
             return;
         }
 
         try {
             const resultado = await PostBoletos(newBoletoInfo);
             if (resultado) {
+                setLoading(false);
                 toast.success('Boleto adicionado com sucesso!');
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);
             } else {
+                setLoading(false);
                 toast.error('Erro ao adicionar boleto!');
             }
         } catch (error) {
+            setLoading(false);
             console.error('Erro ao enviar boleto:', error);
             toast.error('Erro ao enviar boleto!');
         }
@@ -135,6 +142,7 @@ export default function AddBoleto() {
 
     return (
         <>
+            {loading && <Loading />}
             <AnimatePresence mode="wait">
                 <motion.div
                     key="step1"
