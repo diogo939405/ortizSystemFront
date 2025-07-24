@@ -7,6 +7,8 @@ import useTableContext from '../../contexts/UseTableContext';
 import EditRow from './editRow/EditRow';
 import './Tabela.css'; // Importe o arquivo CSS
 import { Tag } from 'primereact/tag'; // Mantenha o Tag do PrimeReact se você quiser usá-lo
+import DeleteModal from './deleteModal/DeleteModal';
+import AtualizarBoleto from './atualizarBoleto/AtualizarBoleto';
 
 export default function TabelaTeste() {
 
@@ -21,6 +23,10 @@ export default function TabelaTeste() {
         edit,
         setEdit,
         setBoletoDataId,
+        setDeleteModal,
+        deleteModal,
+        atualizarModal,
+        setAtualizarModal
     } = useTableContext();
 
     // Estado local para paginação
@@ -42,17 +48,7 @@ export default function TabelaTeste() {
         setGlobalFilterValue(value);
     };
 
-    // Adaptação da lógica de status para o seu Tag do PrimeReact
-    const getStatusClass = (status) => {
-        switch (status) {
-            case true:
-                return 'success'; // ✅ verde para true
-            case false:
-                return 'danger'; // ❌ vermelho para false
-            default:
-                return 'info'; // 🟦 fallback se for null/undefined
-        }
-    };
+
 
     const openEditModal = async (rowData) => {
         setEdit(true);
@@ -70,8 +66,9 @@ export default function TabelaTeste() {
         return boletosData.flatMap(boleto => {
             console.log('Boleto:', boleto);
             if (!boleto.parcelas || !Array.isArray(boleto.parcelas)) return [];
+            const parcelaPendentes = boleto.parcelas.filter(p => p.status === 'Pendente');
             const totalParcelas = boleto.parcelas.length;
-            return boleto?.parcelas.map(parcela => ({
+            return parcelaPendentes.map(parcela => ({
                 id: boleto.id,
                 idBoleto: boleto.idBoleto,
                 tipoGasto: boleto.tipoGasto,
@@ -87,10 +84,26 @@ export default function TabelaTeste() {
         });
     }, [boletosData]);
 
-    const handleDelete = (rowData) => {
-        if (window.confirm(`Tem certeza que deseja excluir o boleto: ${rowData.codigo}?`)) {
-            alert(`Excluir boleto: ${rowData.codigo} (ID: ${rowData.idBoleto})`);
-            // Implemente a lógica de exclusão aqui (chamar API, remover do estado, etc.)
+    const handleDelete = async (rowData) => {
+        localStorage.setItem('idBoletoDelete', rowData.id)
+        const data = await GetBoletosById(rowData.id); // Use idBoleto conforme seus dados
+        if (data) {
+            setBoletoDataId(data);
+        }
+        setDeleteModal(true)
+    };
+
+    const handleAtualizar = async (rowData) => {
+        setAtualizarModal(true);
+        localStorage.setItem('idBoletoAtualizar', rowData.id);
+
+        const data = await GetBoletosById(rowData.id);
+        if (data) {
+            // inclui numeroParcela clicada no objeto
+            setBoletoDataId({
+                ...data,
+                numeroParcela: rowData.numeroParcela // <- importante
+            });
         }
     };
 
@@ -125,7 +138,10 @@ export default function TabelaTeste() {
     }, [filteredData, currentPage, itemsPerPage]);
     return (
         <>
+            {atualizarModal ? <AtualizarBoleto /> : null}
+            {edit ? <AtualizarBoleto /> : null}
             {edit ? <EditRow /> : null}
+            {deleteModal ? <DeleteModal /> : null}
             <div className='bodyTable'>
                 <div
                     className="table-container" // Aplica a classe do CSS
@@ -149,12 +165,11 @@ export default function TabelaTeste() {
                     {loading ? (
                         <p style={{ textAlign: 'center', padding: '20px' }}>Carregando dados...</p>
                     ) : (
-
                         <table className="styled-table">
                             <thead>
                                 <tr>
-                                    <th>Tipo de Gasto</th>
-                                    <th>Valor Total</th>
+                                    <th>Nome do Boleto</th>
+                                    <th>Valor Total do Boleto</th>
                                     <th>Parcela</th>
                                     <th>Valor da Parcela</th>
                                     <th>Vencimento</th>
@@ -169,9 +184,15 @@ export default function TabelaTeste() {
                                             <td>R$ {parseFloat(item.valorTotal).toFixed(2)}</td>
                                             <td>{item.numeroParcela}/{item.totalParcelas}</td>
                                             <td style={{ color: '#9C703BFF' }}>R$ {parseFloat(item.valorParcela).toFixed(2)}</td>
-                                            <td>{new Date(item.vencimento).toLocaleDateString('pt-BR')}</td>
-                                            <td className="always-visible">
-                                                <button className="action-button complete">
+                                            <td>
+                                                {new Intl.DateTimeFormat('pt-BR', {
+                                                    timeZone: 'UTC',
+                                                    year: 'numeric',
+                                                    month: '2-digit',
+                                                    day: '2-digit',
+                                                }).format(new Date(item.vencimento))}
+                                            </td>                                            <td className="always-visible">
+                                                <button className="action-button complete" onClick={() => handleAtualizar(item)}>
                                                     <MdOutlineDoneOutline />
                                                 </button>
                                                 <button className="action-button" onClick={() => openEditModal(item)}>

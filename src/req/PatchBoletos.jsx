@@ -1,18 +1,18 @@
-export default async function PatchBoletos({ formData, boletoDataId }) {
+export default async function PatchBoletos({ formData }) {
     const url = import.meta.env.VITE_API_EDIT_BOLETOS;
     const idBoleto = localStorage.getItem('idBoleto')
-    console.log(boletoDataId, idBoleto)
-    const limparValorMonetario = (valorString) => {
-        if (!valorString) return 0;
+    // console.log(boletoDataId, idBoleto)
+    // const limparValorMonetario = (valorString) => {
+    //     if (!valorString) return 0;
 
-        const valorComoString = String(valorString);
+    //     const valorComoString = String(valorString);
 
-        return (
-            parseFloat(
-                valorComoString.replace('R$', '').replace(/\./g, '').replace(',', '.')
-            ) || 0
-        );
-    };
+    //     return (
+    //         parseFloat(
+    //             valorComoString.replace('R$', '').replace(/\./g, '').replace(',', '.')
+    //         ) || 0
+    //     );
+    // };
 
     try {
         const finalUrl = `${url}/${idBoleto}/parcelas`;

@@ -26,12 +26,13 @@ export default async function postBoletos(newBoletoInfo) {
                 numeroParcela: index + 1,
                 valor: p.valor,
                 vencimento: p.dataVencimento || "",
-                status: false
+                status: 'Pendente',
+                observacao: '',
             }))
             : [],
         createdAt: new Date().toISOString()
     };
-    console.log(payload);
+    console.log("Payload final:", JSON.stringify(payload, null, 2));
     try {
         const res = await fetch(url, {
             method: "POST",

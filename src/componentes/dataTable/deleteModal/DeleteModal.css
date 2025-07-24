@@ -1,0 +1,87 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.modalDelete{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.849);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    overflow: auto;
+}
+
+.modalDelete-Card{
+    flex-direction: column;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 1400px;
+    width: 100%;
+    height: 30%;              /* altura automática baseada no conteúdo */
+    max-height: 90vh;  
+    padding: 20px 0px 30px;        /* limite pra não ultrapassar a tela */   
+    overflow-y: auto;
+    text-align: left;
+    scrollbar-width: thin;
+    scrollbar-color: #0055a5 #e0e0e0; /* cor da barra e do fundo */
+}
+
+.modalDelete-Card-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: 50px; */
+    padding: 20px;
+}
+.modalDelete-Card-content p{
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: #333;
+}
+
+.modalDelete-Card-buttons{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 25px;
+}
+
+ .buttonsCard{
+    font-family: 'Poppins', sans-serif;
+  outline: none;
+  border: none;
+    cursor: pointer;
+    font-size: 1.1  rem;
+    font-weight: 300;
+    width: 120px;
+    height: 40px;
+    border-radius: 15px;
+    color: #fff;
+    transition: transform 0.2s, color 0.2s;
+    background-color: #007bff;
+}
+.buttonsCard.delete{
+    background-color: #dc3545;
+}
+.buttonsCard.delete:hover{
+    transform: scale(1.05);
+    color: #fff;
+    background-color: #b02a37;
+}
+.buttonsCard.back{
+    background-color: #007bff;
+}
+.buttonsCard.back:hover{
+    transform: scale(1.05);
+    color: #fff;
+    background-color: #0055a5;
+}

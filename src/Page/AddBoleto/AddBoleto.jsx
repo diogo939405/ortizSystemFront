@@ -114,6 +114,7 @@ export default function AddBoleto() {
     const handlePost = async () => {
         setLoading(true);
         const camposValidos = VerifyCamps(newBoletoInfo);
+        console.log(newBoletoInfo)
 
         if (!camposValidos) {
             toast.error('Verifique os campos obrigatórios e as parcelas!');
@@ -190,7 +191,7 @@ export default function AddBoleto() {
                                             maxLength={2}
                                         />
                                     </div>
-                                    <div className='addBoleto-form-inputs-input' style={editParcelas ? { display: 'none' } : { display: 'flex' }}>
+                                    {/* <div className='addBoleto-form-inputs-input' style={editParcelas ? { display: 'none' } : { display: 'flex' }}>
                                         <label>Vencimento
                                             <FaCalendar className='icon-input' />
                                         </label>
@@ -207,7 +208,7 @@ export default function AddBoleto() {
                                             required
 
                                         />
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className='addBoleto-form-inputs'>
                                     <div className='addBoleto-form-inputs-bookmarks'>
