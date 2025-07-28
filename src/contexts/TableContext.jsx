@@ -13,13 +13,15 @@ export const TableProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState(null);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [boletoVencendo, setBoletoVencendo] = useState([]);
+    const [boletoVencidos, setBoletoVencidos] = useState([]);
 
     return (
         <TableContext.Provider value={{
             boletosData, setBoletosData,
             loading, setLoading, filters, setFilters, globalFilterValue,
             setGlobalFilterValue, edit, setEdit, boletoDataId, setBoletoDataId, boletoData, setBoletoData, deleteModal, setDeleteModal,
-            atualizarModal, setAtualizarModal
+            atualizarModal, setAtualizarModal, setBoletoVencendo, boletoVencendo, boletoVencidos, setBoletoVencidos
 
         }}>
             {children}

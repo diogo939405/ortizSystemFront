@@ -64,22 +64,21 @@ export default function TabelaTeste() {
     // faz a conversão dos dados para o formato de tabela
     const parcelasFlatten = useMemo(() => {
         return boletosData.flatMap(boleto => {
-            console.log('Boleto:', boleto);
             if (!boleto.parcelas || !Array.isArray(boleto.parcelas)) return [];
-            const parcelaPendentes = boleto.parcelas.filter(p => p.status === 'Pendente');
+
+            const parcelaPendentes = boleto.parcelas.filter(p => p.status === false); // status === false indica pendente
             const totalParcelas = boleto.parcelas.length;
+
             return parcelaPendentes.map(parcela => ({
                 id: boleto.id,
-                idBoleto: boleto.idBoleto,
-                tipoGasto: boleto.tipoGasto,
+                tipoGasto: boleto.tipogasto,
                 valorTotal: boleto.valor,
                 numeroParcela: parcela.numeroParcela,
                 totalParcelas: totalParcelas,
-                valorParcela: parseFloat(
-                    parcela.valor.replace('R$', '').replace('.', '').replace(',', '.')
-                ),
+                valorParcela: parcela.valorParcela,
                 vencimento: parcela.vencimento,
-                status: parcela.status
+                status: parcela.status,
+                observacao: parcela.observacao,
             }));
         });
     }, [boletosData]);
@@ -126,9 +125,9 @@ export default function TabelaTeste() {
     const currentTableData = useMemo(() => {
         // Ordenar os dados pelo vencimento mais próximo
         const sortedData = [...filteredData].sort((a, b) => {
-            const dateA = new Date(a.dataVencimento);
-            const dateB = new Date(b.dataVencimento);
-            return dateA - dateB; // menor para maior
+            const dateA = new Date(a.vencimento);
+            const dateB = new Date(b.vencimento);
+            return dateA - dateB;
         });
 
         // Paginação

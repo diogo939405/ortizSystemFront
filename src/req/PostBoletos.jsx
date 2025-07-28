@@ -16,21 +16,18 @@ export default async function postBoletos(newBoletoInfo) {
     };
 
     const payload = {
-        idBoleto: newBoletoInfo.idBoleto || "",
         tipoGasto: newBoletoInfo.tipoGasto,
-        codigo: newBoletoInfo.codigo,
         valor: limparValorMonetario(newBoletoInfo.valor),
         status: true,
         parcelas: Array.isArray(newBoletoInfo.parcelas)
             ? newBoletoInfo.parcelas.map((p, index) => ({
                 numeroParcela: index + 1,
-                valor: p.valor,
+                valorParcela: p.valorParcela,
                 vencimento: p.dataVencimento || "",
                 status: 'Pendente',
                 observacao: '',
             }))
             : [],
-        createdAt: new Date().toISOString()
     };
     console.log("Payload final:", JSON.stringify(payload, null, 2));
     try {

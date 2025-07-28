@@ -14,6 +14,7 @@ export default function EditRow() {
     const [formData, setFormData] = useState(null)
     const [loading, setLoading] = useState(false)
     const [pago, setPago] = useState(false)
+
     useEffect(() => {
         if (!boletoDataId) {
             setLoading(true);
@@ -194,7 +195,7 @@ export default function EditRow() {
                                                         <input
                                                             type="text"
                                                             readOnly={isPago ? true : false}
-                                                            value={parcela.valor}
+                                                            value={parcela.valorParcela}
                                                             onChange={(e) => handleParcelaChange(index, 'valor', e.target.value)}
                                                         />
 
