@@ -142,7 +142,7 @@ export default function EditRow() {
                     toast.success('Boleto atualizado com sucesso');
                     setTimeout(() => {
                         window.location.reload();
-                    }, 2000);
+                    }, 1500);
                 } else {
                     toast.error('Erro ao atualizar boleto.');
                 }

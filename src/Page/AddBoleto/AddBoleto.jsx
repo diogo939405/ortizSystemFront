@@ -129,7 +129,7 @@ export default function AddBoleto() {
                 toast.success('Boleto adicionado com sucesso!');
                 setTimeout(() => {
                     window.location.reload();
-                }, 2000);
+                }, 1500);
             } else {
                 setLoading(false);
                 toast.error('Erro ao adicionar boleto!');
