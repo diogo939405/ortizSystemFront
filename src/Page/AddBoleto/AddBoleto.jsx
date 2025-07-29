@@ -18,6 +18,8 @@ import PostBoletos from '../../req/PostBoletos'
 import VerifyCamps from './Utils/VerifyCamps'
 import { toast } from 'react-toastify'
 import Loading from '../../componentes/loading/Loading';
+import { useNavigate } from 'react-router-dom';
+
 export default function AddBoleto() {
     const {
         editParcelas,
@@ -26,6 +28,8 @@ export default function AddBoleto() {
         setNewBoletoInfo
     } = useAddBoletoContext();
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
 
     const handleData = (e) => {
         const { name, value } = e.target;
@@ -128,7 +132,7 @@ export default function AddBoleto() {
                 setLoading(false);
                 toast.success('Boleto adicionado com sucesso!');
                 setTimeout(() => {
-                    window.location.reload();
+                    navigate('/addBoleto'); // ou qualquer outra página válida
                 }, 1500);
             } else {
                 setLoading(false);

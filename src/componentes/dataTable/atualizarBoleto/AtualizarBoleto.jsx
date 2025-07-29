@@ -47,9 +47,9 @@ export default function AtualizarBoleto() {
                     setLoading(false);
                     toast.success('Status atualizado com sucesso!');
                     setAtualizarModal(false);
-                    // setTimeout(() => {
-                    window.location.reload();
-                    // }, 1500);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
                 } else {
                     setLoading(false);
                     toast.error('Erro ao atualizar status.');
