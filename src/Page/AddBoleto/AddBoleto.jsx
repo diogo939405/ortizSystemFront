@@ -133,6 +133,7 @@ export default function AddBoleto() {
                 toast.success('Boleto adicionado com sucesso!');
                 setTimeout(() => {
                     navigate('/'); // ou qualquer outra página válida
+                    window.location.reload();
                 }, 1500);
             } else {
                 setLoading(false);
