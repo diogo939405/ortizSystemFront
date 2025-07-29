@@ -5,7 +5,7 @@ import { AnimatePresence } from "motion/react"
 import useTableContext from '../../../contexts/UseTableContext';
 import DeleteBoleto from '../../../req/DeleteBoleto'
 import { toast } from 'react-toastify';
-import Loading from '../../Loading/Loading';
+import Loading from '../..loading/Loading';
 export default function DeleteModal() {
     const { setDeleteModal, boletoDataId } = useTableContext();
     const [formData, setFormData] = useState(null)

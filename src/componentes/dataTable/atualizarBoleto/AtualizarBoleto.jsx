@@ -3,7 +3,7 @@ import { motion } from "motion/react"
 import { AnimatePresence } from "motion/react"
 import useTableContext from '../../../contexts/UseTableContext';
 import { toast } from 'react-toastify';
-import Loading from '../../Loading/Loading';
+import Loading from '../../loading/Loading';
 import './AtualizarBoleto.css';
 import ChangeStatus from '../../../req/ChangeStatus';
 

@@ -4,7 +4,7 @@ import './EditRow.css';
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { ImBooks } from "react-icons/im";
 import { TbNumber } from "react-icons/tb";
-import Loading from '../../Loading/Loading';
+import Loading from '../../loading/Loading';
 import { toast } from 'react-toastify';
 import PatchBoletos from '../../../req/PatchBoletos';
 import { motion } from "motion/react";
