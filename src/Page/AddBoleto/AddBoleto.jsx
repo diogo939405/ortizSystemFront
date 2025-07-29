@@ -17,7 +17,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import PostBoletos from '../../req/PostBoletos'
 import VerifyCamps from './Utils/VerifyCamps'
 import { toast } from 'react-toastify'
-import Loading from '../../componentes/Loading/Loading';
+import Loading from '../../componentes/loading/Loading';
 export default function AddBoleto() {
     const {
         editParcelas,
