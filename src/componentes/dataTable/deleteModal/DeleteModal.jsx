@@ -19,8 +19,8 @@ export default function DeleteModal() {
 
     const handleDelete = () => {
         setLoading(true);
-        const idBoleto = localStorage.getItem('idBoletoDelete');
-        DeleteBoleto({ idBoleto })
+        // const idBoleto = localStorage.getItem('idBoletoDelete');
+        DeleteBoleto()
             .then((res) => {
                 if (!res) {
                     setLoading(false);

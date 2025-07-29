@@ -15,22 +15,22 @@ export const SidebarData = [
         icon: <FaPlus />,
         cName: 'nav-text'
     },
-    {
-        title: 'Services',
-        path: '/services',
-        icon: <FaHome />,
-        cName: 'nav-text'
-    },
-    {
-        title: 'Contact',
-        path: '/contact',
-        icon: <FaHome />,
-        cName: 'nav-text'
-    },
-    {
-        title: 'Sign In',
-        path: '/signin',
-        icon: <FaHome />,
-        cName: 'nav-text'
-    },
+    // {
+    //     title: 'Services',
+    //     path: '/services',
+    //     icon: <FaHome />,
+    //     cName: 'nav-text'
+    // },
+    // {
+    //     title: 'Contact',
+    //     path: '/contact',
+    //     icon: <FaHome />,
+    //     cName: 'nav-text'
+    // },
+    // {
+    //     title: 'Sign In',
+    //     path: '/signin',
+    //     icon: <FaHome />,
+    //     cName: 'nav-text'
+    // },
 ]

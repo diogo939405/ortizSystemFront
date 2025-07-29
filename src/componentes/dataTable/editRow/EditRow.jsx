@@ -1,25 +1,46 @@
-import React, { useState, useEffect } from 'react'
-import useTableContext from '../../../contexts/UseTableContext'
-import './EditRow.css'
+import React, { useState, useEffect } from 'react';
+import useTableContext from '../../../contexts/UseTableContext';
+import './EditRow.css';
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { ImBooks } from "react-icons/im";
 import { TbNumber } from "react-icons/tb";
 import Loading from '../../Loading/Loading';
 import { toast } from 'react-toastify';
 import PatchBoletos from '../../../req/PatchBoletos';
-import { motion } from "motion/react"
-import { AnimatePresence } from "motion/react"
+import { motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
+
 export default function EditRow() {
     const { setEdit, boletoDataId } = useTableContext();
-    const [formData, setFormData] = useState(null)
-    const [loading, setLoading] = useState(false)
-    const [pago, setPago] = useState(false)
+    const [formData, setFormData] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    // Função auxiliar para formatar um número para moeda
+    const formatarParaMoeda = (valor) => {
+        // Converte para número primeiro, se não for
+        const num = parseFloat(String(valor).replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
+        return 'R$ ' + num.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
 
     useEffect(() => {
         if (!boletoDataId) {
             setLoading(true);
         } else {
-            setFormData(boletoDataId);
+            // Crie uma cópia profunda para evitar mutar o objeto original do contexto
+            const initialFormData = JSON.parse(JSON.stringify(boletoDataId));
+
+            // Formata o valor total do boleto, se necessário
+            initialFormData.valor = formatarParaMoeda(initialFormData.valor);
+
+            // Percorre as parcelas e formata o valor de cada uma
+            if (Array.isArray(initialFormData.parcelas)) {
+                initialFormData.parcelas = initialFormData.parcelas.map(parcela => ({
+                    ...parcela,
+                    // Garante que o valor da parcela esteja no formato "R$ XX,XX"
+                    valor: formatarParaMoeda(parcela.valor)
+                }));
+            }
+            setFormData(initialFormData);
             setLoading(false);
         }
     }, [boletoDataId]);
@@ -29,25 +50,19 @@ export default function EditRow() {
             const updatedParcelas = [...prev.parcelas];
 
             if (field === 'valor') {
-                // Remove tudo que não é número
                 let raw = value.replace(/\D/g, '').substring(0, 10);
 
-                // Se estiver vazio, mostra R$ 0,00
                 if (!raw) {
                     updatedParcelas[index][field] = 'R$ 0,00';
                 } else {
                     const num = parseFloat(raw) / 100;
-
                     const formatted = 'R$ ' + num
                         .toFixed(2)
                         .replace('.', ',')
                         .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
                     updatedParcelas[index][field] = formatted;
                 }
-
             } else {
-                // Para vencimento ou outros campos
                 updatedParcelas[index][field] = value;
             }
 
@@ -57,17 +72,18 @@ export default function EditRow() {
             };
         });
     };
+
     const handleChange = (e) => {
-        const { name, value } = e.target
+        const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value
         }));
-    }
+    };
+
     const handleClose = () => {
         setEdit(false);
     };
-
 
     const verifySum = () => {
         const parcelas = Array.isArray(formData.parcelas) ? formData.parcelas : [];
@@ -93,7 +109,9 @@ export default function EditRow() {
         }
 
         return true;
-    }; const handleData = () => {
+    };
+
+    const handleData = () => {
         setLoading(true);
 
         if (formData.tipoGasto === '' || formData.valor === '') {
@@ -107,13 +125,24 @@ export default function EditRow() {
             return;
         }
 
-        PatchBoletos({ formData, boletoDataId })
+        // Antes de enviar, precisamos "desformatar" os valores para números novamente
+        const dataToSend = JSON.parse(JSON.stringify(formData)); // Copia para não modificar formData diretamente
+        dataToSend.valor = parseFloat(String(dataToSend.valor).replace('R$ ', '').replace(/\./g, '').replace(',', '.')) || 0;
+        if (Array.isArray(dataToSend.parcelas)) {
+            dataToSend.parcelas = dataToSend.parcelas.map(parcela => ({
+                ...parcela,
+                valor: parseFloat(String(parcela.valor).replace('R$ ', '').replace(/\./g, '').replace(',', '.')) || 0
+            }));
+        }
+
+        // Passa o objeto desformatado para a função de patch
+        PatchBoletos({ formData: dataToSend, boletoDataId })
             .then((res) => {
                 if (res) {
-                    toast.success('boleto atualizado com sucesso');
+                    toast.success('Boleto atualizado com sucesso');
                     setTimeout(() => {
                         window.location.reload();
-                    }, 2000); // ✅ array removido
+                    }, 2000);
                 } else {
                     toast.error('Erro ao atualizar boleto.');
                 }
@@ -123,26 +152,15 @@ export default function EditRow() {
                 toast.error('Erro ao enviar dados.');
             })
             .finally(() => {
-                setLoading(false); // ✅ Executado sempre no final
+                setLoading(false);
             });
     };
 
-
     return (
         <>
-
             {loading && <Loading />}
-            {/* <AnimatePresence mode="wait">
-                <motion.div
-                    key="step1"
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 50 }}
-                    transition={{ duration: 0.5 }}
-                > */}
             {
                 !formData ? <Loading /> :
-
                     <div className='EditRow-container'>
                         <div className='EditRow-container-card'>
                             <div className='EditRow-title'>
@@ -160,7 +178,7 @@ export default function EditRow() {
                                     />
                                     <label>Valor total do Boleto <TbNumber className='icon-input-editRow' /></label>
                                     <input
-                                        value={formData?.valor || ''}
+                                        value={formData?.valor || ''} // Este já deve vir formatado pelo useEffect
                                         onChange={(e) => handleChange(e)}
                                         name='valor'
                                         readOnly
@@ -172,7 +190,6 @@ export default function EditRow() {
                                 {
                                     formData?.parcelas?.map((parcela, index) => {
                                         const isPago = parcela.status === "pago";
-                                        // const backgroundColor = isPago ? '#28A746FF' : '#f0f4f8';
                                         const borderLeft = isPago ? '5px solid #28A746FF' : '5px solid #2c3e50';
                                         const borderBottom = isPago ? '4px solid #28A746FF' : '4px solid #2c3e50';
                                         return (
@@ -186,7 +203,6 @@ export default function EditRow() {
                                                                     value={parcela.observacao || ''}
                                                                     readOnly
                                                                 />
-
                                                             </>
                                                         )
                                                     }
@@ -195,11 +211,10 @@ export default function EditRow() {
                                                         <input
                                                             type="text"
                                                             readOnly={isPago ? true : false}
-                                                            value={parcela.valorParcela}
+                                                            // O valor já vem formatado pelo useEffect
+                                                            value={parcela.valor}
                                                             onChange={(e) => handleParcelaChange(index, 'valor', e.target.value)}
                                                         />
-
-
                                                     </div>
 
                                                     <label >Vencimento</label>
@@ -207,7 +222,6 @@ export default function EditRow() {
                                                         <input
                                                             type="date"
                                                             readOnly={isPago ? true : false}
-
                                                             value={parcela.vencimento}
                                                             onChange={(e) => handleParcelaChange(index, 'vencimento', e.target.value)}
                                                         />
@@ -229,13 +243,8 @@ export default function EditRow() {
                                 </button>
                             </div>
                         </div>
-
                     </div>
             }
-            {/* </motion.div >
-            </AnimatePresence > */}
         </>
-
-
     );
 }

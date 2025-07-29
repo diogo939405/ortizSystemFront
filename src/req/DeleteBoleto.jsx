@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default async function DeleteBoleto({ id }) {
+export default async function DeleteBoleto() {
     const url = import.meta.env.VITE_API_DELETE_BOLETO
     const idBoleto = localStorage.getItem('idBoletoDelete');
     console.log('idBoleto', idBoleto)

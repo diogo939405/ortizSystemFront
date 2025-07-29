@@ -16,13 +16,15 @@ export default async function postBoletos(newBoletoInfo) {
     };
 
     const payload = {
+
         tipoGasto: newBoletoInfo.tipoGasto,
         valor: limparValorMonetario(newBoletoInfo.valor),
         status: true,
         parcelas: Array.isArray(newBoletoInfo.parcelas)
             ? newBoletoInfo.parcelas.map((p, index) => ({
+                tipoGasto: newBoletoInfo.tipoGasto,
                 numeroParcela: index + 1,
-                valorParcela: p.valorParcela,
+                valor: limparValorMonetario(p.valor),
                 vencimento: p.dataVencimento || "",
                 status: 'Pendente',
                 observacao: '',
@@ -33,7 +35,9 @@ export default async function postBoletos(newBoletoInfo) {
     try {
         const res = await fetch(url, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify(payload)
         });
 
@@ -47,6 +51,6 @@ export default async function postBoletos(newBoletoInfo) {
             return false;
         }
     } catch (err) {
-        console.error("❌ Erro ao enviar boleto:", err.message);
+        console.error(" Erro ao enviar boleto:", err.message);
     }
 };

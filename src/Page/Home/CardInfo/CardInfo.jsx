@@ -4,43 +4,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileInvoiceDollar, faClock, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import useTableContext from '../../../contexts/UseTableContext'
 import GetBoletosVencendo from '../../../req/GetBoletosVencendo'
+import GetBoletosVencidos from '../../../req/GetBoletosVencidos'
 export default function CardInfo() {
 
     const {
         boletosData,
-        setBoletoVencendo,
         boletoVencendo,
+        setBoletoVencendo,
         boletoVencidos,
         setBoletoVencidos
     } = useTableContext();
 
+    useEffect(() => {
+        async function fetchData() {
+            const data = await GetBoletosVencendo();
+            // console.log("📦 Boletos vencendo recebidos:", data);
+            setBoletoVencendo(data);
+        }
+        fetchData();
+    }, [setBoletoVencendo]);
 
     useEffect(() => {
-        GetBoletosVencendo()
-            .then(data => {
-                setBoletoVencendo(data);
-                console.log('Boletos vencendo:', data);
-            })
-            .catch(error => {
-                console.error('Erro ao buscar boletos vencendo:', error);
-            })
-
-    }, [boletoVencendo, setBoletoVencendo]);
-
-    // useEffect(() => {
-    //     GetBoletosVencendo()
-    //         .then(data => {
-    //             setBoletoVencidos(data);
-    //             console.log('Boletos vencidos:', data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Erro ao buscar boletos vencidos:', error);
-    //         })
-    // })
-
-
+        async function fetchVencidos() {
+            const vencidos = await GetBoletosVencidos();
+            console.log("📦 Boletos vencidos recebidos:", vencidos);
+            setBoletoVencidos(vencidos);
+        }
+        fetchVencidos();
+    }, [setBoletoVencidos])
     // const dataVenciment = boletosData.sort((a, b) => new Date(b.boletosData.parcelas.vencimento) - new Date(a.boletosData.parcelas.vencimento));
     const totalBoletos = boletosData.length;
+    const totalVencendo = Array.isArray(boletoVencendo) ? boletoVencendo.length : 0;
+    const totalVencidos = Array.isArray(boletoVencidos) ? boletoVencidos.length : 0;
+
     return (
         <div className='Card-content'>
             <div className='Cards'>
@@ -58,15 +54,15 @@ export default function CardInfo() {
                         <FontAwesomeIcon icon={faClock} />
                     </div>
                     <p className='Card-title'>Vencimento próximo</p>
-                    <span className='Card-value'>{boletoVencendo.length}</span>
+                    <span className='Card-value'>{totalVencendo}</span>
                 </div>
 
                 <div className='Card' id='boletoVencidos'>
                     <div className="Card-icon">
                         <FontAwesomeIcon icon={faExclamationTriangle} />
                     </div>
-                    <p className='Card-title'>Boletos vencidos</p>
-                    <span className='Card-value'>{boletoVencidos.length}</span>
+                    <p className='Card-title'>Parcelas Vencidas</p>
+                    <span className='Card-value'>{totalVencidos}</span>
                 </div>
 
             </div>

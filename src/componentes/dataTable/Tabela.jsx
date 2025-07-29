@@ -66,16 +66,16 @@ export default function TabelaTeste() {
         return boletosData.flatMap(boleto => {
             if (!boleto.parcelas || !Array.isArray(boleto.parcelas)) return [];
 
-            const parcelaPendentes = boleto.parcelas.filter(p => p.status === false); // status === false indica pendente
+            const parcelaPendentes = boleto.parcelas.filter(p => p.status === 'Pendente'); // status === false indica pendente
             const totalParcelas = boleto.parcelas.length;
 
             return parcelaPendentes.map(parcela => ({
                 id: boleto.id,
-                tipoGasto: boleto.tipogasto,
+                tipoGasto: boleto.tipoGasto,
                 valorTotal: boleto.valor,
                 numeroParcela: parcela.numeroParcela,
                 totalParcelas: totalParcelas,
-                valorParcela: parcela.valorParcela,
+                valorParcela: parcela.valor, // Acessando diretamente o valor da parcela
                 vencimento: parcela.vencimento,
                 status: parcela.status,
                 observacao: parcela.observacao,
@@ -138,8 +138,7 @@ export default function TabelaTeste() {
     return (
         <>
             {atualizarModal ? <AtualizarBoleto /> : null}
-            {edit ? <AtualizarBoleto /> : null}
-            {edit ? <EditRow /> : null}
+            {edit ? <EditRow /> : null} {/* Mantido apenas EditRow ou AtualizarBoleto, um dos dois, para evitar conflito */}
             {deleteModal ? <DeleteModal /> : null}
             <div className='bodyTable'>
                 <div
@@ -180,17 +179,21 @@ export default function TabelaTeste() {
                                     currentTableData.map((item, index) => (
                                         <tr key={`${item.id}-${index}`}>
                                             <td>{item.tipoGasto}</td>
-                                            <td>R$ {parseFloat(item.valorTotal).toFixed(2)}</td>
+                                            <td style={{ color: '#2c5364' }}>R$ {parseFloat(item.valorTotal).toFixed(2)}</td>
                                             <td>{item.numeroParcela}/{item.totalParcelas}</td>
-                                            <td style={{ color: '#9C703BFF' }}>R$ {parseFloat(item.valorParcela).toFixed(2)}</td>
+                                            <td style={{ color: '#9C703BFF' }}>
+                                                R$ {parseFloat(item.valorParcela).toFixed(2).replace('.', ',')}
+                                            </td>
                                             <td>
+                                                {/* {item.vencimento} */}
                                                 {new Intl.DateTimeFormat('pt-BR', {
                                                     timeZone: 'UTC',
                                                     year: 'numeric',
                                                     month: '2-digit',
                                                     day: '2-digit',
                                                 }).format(new Date(item.vencimento))}
-                                            </td>                                            <td className="always-visible">
+                                            </td>
+                                            <td className="always-visible">
                                                 <button className="action-button complete" onClick={() => handleAtualizar(item)}>
                                                     <MdOutlineDoneOutline />
                                                 </button>
@@ -205,7 +208,7 @@ export default function TabelaTeste() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>
+                                        <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>
                                             Nenhuma parcela encontrada.
                                         </td>
                                     </tr>
