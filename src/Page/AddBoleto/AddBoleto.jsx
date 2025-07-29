@@ -132,7 +132,7 @@ export default function AddBoleto() {
                 setLoading(false);
                 toast.success('Boleto adicionado com sucesso!');
                 setTimeout(() => {
-                    navigate('/addBoleto'); // ou qualquer outra página válida
+                    navigate('/'); // ou qualquer outra página válida
                 }, 1500);
             } else {
                 setLoading(false);
