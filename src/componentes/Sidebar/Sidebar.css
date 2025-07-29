@@ -81,3 +81,57 @@ cursor: pointer;
    border-radius: 50%;
    cursor: pointer;
 }
+/* Sidebar.css */
+
+/* ... (seu CSS atual permanece igual até aqui) */
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px !important;
+        position: fixed;
+        z-index: 1000;
+    }
+
+    .sidebarLogo img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .row #title {
+        display: none;
+    }
+
+    .row #icon {
+        margin-left: 0px !important;
+    }
+
+    .sidebarFooter {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 60px !important;
+    }
+
+    .sidebarLogo {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .sidebarLogo img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .sidebarFooter {
+        height: 60px;
+    }
+
+    #sidebarActions {
+        font-size: 24px !important;
+    }
+}

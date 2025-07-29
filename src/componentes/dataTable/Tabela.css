@@ -1,3 +1,5 @@
+
+
 .bodyTable {
     display: flex;
     justify-content: center;
@@ -20,6 +22,8 @@
     background-color: #ffffff;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     padding-bottom: 1rem;
+    overflow-x: auto;
+
 }
 
 /* Cabeçalho */
@@ -197,6 +201,15 @@
     .table-container,
     .pagination-container {
         width: 95%;
+    }
+    .table-header input {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .styled-table {

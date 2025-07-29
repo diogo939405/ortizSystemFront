@@ -1,6 +1,8 @@
 import React from 'react'
 import './Sidebar.css'
 import logo from '../../assets/logoOrtiz.png'
+import { useNavigate, useLocation } from 'react-router-dom';
+
 import { SidebarData } from './SidebarData'
 import useSidebarContext from './../../contexts/UseSidebarContext';
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
@@ -8,7 +10,8 @@ import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 
 
 export default function Sidebar() {
-
+    const navigate = useNavigate();
+    const location = useLocation();
     const { sidebarOpen, setSidebarOpen } = useSidebarContext();
     return (
         <div className='sidebar' style={sidebarOpen ? { width: "200px" } : { width: "90px" }}>
@@ -21,10 +24,8 @@ export default function Sidebar() {
                         <li key={key}
                             className='row'
                             style={{ alignItems: sidebarOpen ? 'center' : 'none' }}
-                            id={window.location.pathname === val.path ? 'active' : ''}
-                            onClick={() => {
-                                window.location.pathname = val.path
-                            }}
+                            id={location.pathname === val.path ? 'active' : ''}
+                            onClick={() => navigate(val.path)}
                         >
                             <div id='icon' style={{ marginLeft: !sidebarOpen ? '30px' : '0px' }}> {val.icon}</div>{''}
                             <div id='title'>{sidebarOpen ? val.title : ''}</div>

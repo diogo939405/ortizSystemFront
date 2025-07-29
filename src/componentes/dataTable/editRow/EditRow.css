@@ -209,3 +209,87 @@ margin-bottom: 20px;
   .button-edit.Cancel:hover{
     background-color: #b02a37;
   }
+  /* === Responsividade === */
+
+/* Telas grandes (a partir de 1440px) */
+@media (min-width: 1440px) {
+  .EditRow-container-card {
+    width: 60%;
+    padding: 30px 40px;
+  }
+
+  .EditRow-card-parcelaInfo {
+    width: 48%;
+  }
+}
+
+/* Telas médias (até 1024px) */
+@media (max-width: 1024px) {
+  .EditRow-container-card {
+    width: 80%;
+    padding: 25px 20px;
+  }
+
+  .EditRow-card-boletoInfo input {
+    width: 100%;
+  }
+
+  .EditRow-card-parcelaInfo {
+    width: 100%;
+  }
+
+  .EditRow-card-buttons {
+ 
+    gap: 15px;
+  }
+
+  .button-edit {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+/* Telas pequenas (até 768px) */
+@media (max-width: 768px) {
+  .EditRow-container-card {
+    width: 95%;
+    padding: 20px 10px;
+  }
+
+  .EditRow-title h2 {
+    font-size: 1.3rem;
+  }
+
+  .EditRow-card-content {
+    padding: 10px;
+    gap: 20px;
+  }
+
+  .EditRow-card-parcelaInfo {
+    padding: 0;
+  }
+
+  .EditRow-card-parcelaInfo-inputs {
+    padding: 15px;
+  }
+
+  .EditRow-card-parcelaInfo-inputs label,
+  .EditRow-card-parcelaInfo-inputs .labelText {
+    font-size: 14px;
+  }
+
+  .EditRow-card-parcelaInfo-inputs input,
+  .EditRow-card-parcelaInfo-inputs textarea {
+    font-size: 13px;
+  }
+
+  .EditRow-card-buttons {
+   
+    gap: 10px;
+  }
+
+  .button-edit {
+    font-size: 15px;
+    width: 90%;
+  }
+}
