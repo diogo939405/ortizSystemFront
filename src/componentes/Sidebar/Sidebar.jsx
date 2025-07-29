@@ -33,8 +33,8 @@ export default function Sidebar() {
                     )
                 })}
                 <div className='sidebarFooter'>
-                    <MdKeyboardDoubleArrowRight id='sidebarActions' style={{ color: '#fff', fontSize: '30px', display: sidebarOpen ? 'flex' : 'none' }} onClick={() => setSidebarOpen(!sidebarOpen)} />
-                    <MdKeyboardDoubleArrowLeft id='sidebarActions' style={{ color: '#fff', marginRight: !sidebarOpen ? '20px' : '0px', fontSize: '30px', display: !sidebarOpen ? 'flex' : 'none' }} onClick={() => setSidebarOpen(!sidebarOpen)} />
+                    <MdKeyboardDoubleArrowRight id='sidebarActions' style={{ color: '#fff', fontSize: '30px', display: !sidebarOpen ? 'flex' : 'none' }} onClick={() => setSidebarOpen(!sidebarOpen)} />
+                    <MdKeyboardDoubleArrowLeft id='sidebarActions' style={{ color: '#fff', marginRight: !sidebarOpen ? '20px' : '0px', fontSize: '30px', display: sidebarOpen ? 'flex' : 'none' }} onClick={() => setSidebarOpen(!sidebarOpen)} />
 
                 </div>
             </ul>
