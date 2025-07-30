@@ -17,11 +17,15 @@ export default function EditRow() {
 
     // Função auxiliar para formatar um número para moeda
     const formatarParaMoeda = (valor) => {
-        // Converte para número primeiro, se não for
-        const num = parseFloat(String(valor).replace('R$', '').replace(/\./g, '').replace(',', '.')) || 0;
-        return 'R$ ' + num.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    };
+        const num = parseFloat(String(valor).replace(/[^\d,.-]/g, '').replace(',', '.'));
 
+        if (isNaN(num)) return 'R$ 0,00';
+
+        return 'R$ ' + num
+            .toFixed(2)
+            .replace('.', ',')
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
     useEffect(() => {
         if (!boletoDataId) {
             setLoading(true);
